@@ -15,4 +15,4 @@ Software:
 
 Steps for firmware development
 1. Multithreading 
-  Real-time operating system (RTOS) that run on our microcontroller STM32F411RE allow us to execute multiple tasks concurrently. We adopted multi-threading of CMSIS RTOS in reading real time ambient temperature every 100 milliseconds, displaying colour on RGB LEDs every 4 seconds, and displaying real time temperature condition on LCD screen every 4 seconds without affecting one another. 
+Real-time operating system (RTOS) that run on our microcontroller STM32F411RE allow us to execute multiple tasks concurrently. We adopted multi-threading of CMSIS RTOS in reading real time ambient temperature every 100 milliseconds, displaying colour on RGB LEDs every 4 seconds, and displaying real time temperature condition on LCD screen every 4 seconds without affecting one another. 
