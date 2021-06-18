@@ -1,2 +1,2 @@
-# Arm-based-Temperature-Controlled-Lighting-System
+# Introduction
 Arm-based Temperature Controlled Lighting System
