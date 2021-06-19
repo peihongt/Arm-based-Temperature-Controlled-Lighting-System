@@ -105,7 +105,7 @@ Fourth Step: PrintLCD Thread Setup
 2. RGB LEDs setup
 
 3. LCD screen setup
-- Basically, the setup of LCD screen on STM32 Nucleo Board is shown as schematic below. We could see that other than LCD screen and STM32 Nucleo board, there is an additional potentiometer and 1k ohm resistor. The pin Vo of the LCD act as a control pin to adjust the contrast of LCD. The middle variable output pin of the potentiometer is connected to Vo pin of the LCD to provide an adjustable variable voltage from 0V to 5V for adjusting the LCD contrast. 
+- Basically, the setup of LCD screen on STM32 Nucleo Board is shown as schematic below. We could see that other than LCD screen and STM32 Nucleo board, there is an additional potentiometer. The pin Vo of the LCD act as a control pin to adjust the contrast of LCD. The middle variable output pin of the potentiometer is connected to Vo pin of the LCD to provide an adjustable variable voltage from 0V to 5V for adjusting the LCD contrast. 
 
 ![image](https://user-images.githubusercontent.com/82261395/122649886-afb7f180-d162-11eb-860a-a9e29563f523.png)
 
