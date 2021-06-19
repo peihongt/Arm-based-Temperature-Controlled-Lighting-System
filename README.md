@@ -9,6 +9,7 @@ Hardware:
 - 110ohms Resistors
 - 10k potentiometer
 - LM35 temperature sensor
+
 ![image](https://user-images.githubusercontent.com/82261395/122631081-67b1b400-d0fb-11eb-865a-f7c9f88acc03.png)
 
 Software:
