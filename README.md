@@ -3,18 +3,18 @@ In this project, we will be using STM32 Nucleo-64 development board to display d
 
 # Hardware and Software needed
 Hardware:
-- STM32 Nucleo-64 development board (we are using STM32F411RE)
-- 2x16 LCD display
-- RGB LEDs 
-- 110ohms Resistors
-- 10k potentiometer
-- LM35 temperature sensor
+1. STM32 Nucleo-64 development board (we are using STM32F411RE)
+2. 2x16 LCD display
+3. RGB LEDs 
+4. 110ohms Resistors
+5. 10k potentiometer
+6. LM35 temperature sensor
 
 ![image](https://user-images.githubusercontent.com/82261395/122631081-67b1b400-d0fb-11eb-865a-f7c9f88acc03.png)
 
 Software:
-- STM32CubeMX IDE
-- Keil uVision
+1. STM32CubeMX IDE
+2. Keil uVision
 
 # Configuration steps
 This session is divided into 4 main parts as configuration needs to be done separately at multithreading, ADC on temperature from LM35 temperature sensors, PWM control on RGB LEDs, and LCD display using STM32CubeMX IDE. 
@@ -31,7 +31,7 @@ This session is divided into 4 main parts as configuration needs to be done sepa
 
 ![image](https://user-images.githubusercontent.com/82261395/122635598-71491500-d117-11eb-9959-d3c0dded7a62.png)
 
-2. ADC on temperature from LM35 temperature sensors
+2. ADC conversion on input analog temperature value
 - Step 1: In the Categories tab on the left, go to Analog and select ADC1. 
 - Step 2: Enable the IN0 which corresponds to output pin PA0 to configure it as an ADC pin
 - Step 3: Set the resolution value to 12 bits (15 ADC clock cycles) which specify the ADC values that we'll be getting ranges from 0 to 2^12.
@@ -64,8 +64,12 @@ This session is divided into 4 main parts as configuration needs to be done sepa
 ![image](https://user-images.githubusercontent.com/82261395/122635688-f9c7b580-d117-11eb-8d4b-991be24d9f30.png)
 
 # Steps for firmware development
-Multithreading
+First Step: Defines Multiple Threads
 - Real-time operating system (RTOS) that run on our microcontroller STM32F411RE allow us to execute multiple tasks concurrently. The scheduler or OsKernel is told to handle three threads which are ReadTemp, PrintLED and PrintLCD. In this case, preemption is enabled to allow the scheduler to stop task from running to run another task of higher priority. In the configuration pane, thread ReadTemp is set to OsPriorityNormal while PrintLED and PrintLCD is set to OsPriorityBelowNormal. We want the operation of temperature reading to take place first because LED and LCD printing only can be done when the data read from the temperature sensor is ready. From the Figure below, real time ambient temperature is read every 100 milliseconds, new RGB LEDs colour will be updated every 4 seconds, and displaying real time temperature condition on LCD screen every 4 seconds without affecting one another. At 0s, scheduler execute ReadTemp thread first as it is set to higher priority. After the execution of ReadTemp thread finish, it is followed by PrintLED and PrintLCD thread. PrintLED and PrintLCD thread will be executed in round-robin as they are having same priority level. Same concept is repeated every 4 seconds. 
 
 ![image](https://user-images.githubusercontent.com/82261395/122637649-7364a100-d122-11eb-96f3-955c93b553af.png)
 
+Second Step: Read Temp Thread
+- The entire process flow start with reading of ambient temperature from the surrounding every 100milliseconds. LM35 temperature sensor we used is an analog sensor that converts the surrounding temperature to a proportional analog voltage. The information or signal that we obtained from LM35 temperature is in the form of analog signal. In this case,  our microcontroller STM32F411RE is embedded with ADC converter that managed to derive the equivalent temperature value in digital format. In the ADC configuration step, he resolution value is set to 12 bits meaning this is the sample steps for our ADC, the converted ADC values or integer values that we get will be in the range from 0 to 2^12 = 4096. Then, Kalman Filter is applied in this project to further stabilize the temperature value from the LM35 temperature after ADC conversion. 
+
+PWM control on RGB LEDs
