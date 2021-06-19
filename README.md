@@ -15,5 +15,5 @@ Software:
 - Keil uVision
 
 # Steps for firmware development
-# Multithreading 
+Multithreading:
 Real-time operating system (RTOS) that run on our microcontroller STM32F411RE allow us to execute multiple tasks concurrently. The scheduler or OsKernel is told to handle three threads in this case which are ReadTemp, PrintLED and PrintLCD. Besides, preemption is enabled to allow the scheduler to stop task from running to run another task of higher priority. In the configuration pane, thread ReadTemp is set to OsPriorityNormal while PrintLED and PrintLCD is set to OsPriorityBelowNormal. We want the operation of temperature reading to take place first because LED and LCD printing only can be done when the data read from the temperature sensor is ready. eading real time ambient temperature every 100 milliseconds, displaying colour on RGB LEDs every 4 seconds, and displaying real time temperature condition on LCD screen every 4 seconds without affecting one another. 
