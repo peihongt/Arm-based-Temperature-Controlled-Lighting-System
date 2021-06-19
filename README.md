@@ -87,4 +87,6 @@ Third Step: PWM control on RGB LEDs
 4. Kalman temperature <= 25 : RGB LEDs print RED
 - When a different range of temperature is detected, the colour of RGB LEDs with be changing gradually from previous colour to the new colour which represents a new detected temperature range. 
 
-Forth Step: LCD Display
+![image](https://user-images.githubusercontent.com/82261395/122647624-99f0ff00-d157-11eb-9258-a0307d271782.png)
+
+Fourth Step: LCD Display
