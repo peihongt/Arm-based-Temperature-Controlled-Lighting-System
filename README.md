@@ -65,7 +65,11 @@ This session is divided into 4 main parts as configuration needs to be done sepa
 
 # Steps for firmware development
 First Step: Defines Multiple Threads
-- Real-time operating system (RTOS) that run on our microcontroller STM32F411RE allow us to execute multiple tasks concurrently. The scheduler or OsKernel is told to handle three threads which are ReadTemp, PrintLED and PrintLCD. In this case, preemption is enabled to allow the scheduler to stop task from running to run another task of higher priority. In the configuration pane, thread ReadTemp is set to OsPriorityNormal while PrintLED and PrintLCD is set to OsPriorityBelowNormal. We want the operation of temperature reading to take place first because LED and LCD printing only can be done when the data read from the temperature sensor is ready. From the Figure below, real time ambient temperature is read every 100 milliseconds, new RGB LEDs colour will be updated every 4 seconds, and displaying real time temperature condition on LCD screen every 4 seconds without affecting one another. At 0s, scheduler execute ReadTemp thread first as it is set to higher priority. After the execution of ReadTemp thread finish, it is followed by PrintLED and PrintLCD thread. PrintLED and PrintLCD thread will be executed in round-robin as they are having same priority level. Same concept is repeated every 4 seconds. 
+- Real-time operating system (RTOS) that run on our microcontroller STM32F411RE allow us to execute multiple tasks concurrently. The scheduler or OsKernel is told to handle three threads which are ReadTemp, PrintLED and PrintLCD. In this case, preemption is enabled to allow the scheduler to stop task from running to run another task of higher priority. In the configuration pane, thread ReadTemp is set to OsPriorityNormal while PrintLED and PrintLCD is set to OsPriorityBelowNormal. We want the operation of temperature reading to take place first because LED and LCD printing only can be done when the data read from the temperature sensor is ready. From the Figure below, real time ambient temperature is read every 100 milliseconds, new RGB LEDs colour will be updated every 4 seconds, and displaying real time temperature condition on LCD screen every 4 seconds without affecting one another. 
+
+![image](https://user-images.githubusercontent.com/82261395/122644535-432ff900-d148-11eb-981d-b152edd238fc.png)
+
+At 0s, scheduler execute ReadTemp thread first as it is set to higher priority. After the execution of ReadTemp thread finish, it is followed by PrintLED and PrintLCD thread. PrintLED and PrintLCD thread will be executed in round-robin as they are having same priority level. Same concept is repeated every 4 seconds. 
 
 ![image](https://user-images.githubusercontent.com/82261395/122637649-7364a100-d122-11eb-96f3-955c93b553af.png)
 
@@ -74,9 +78,9 @@ Second Step: Read Temp Thread
 
 Third Step: PWM control on RGB LEDs
 - As we know that RGB stands for Red, Green and Blue and these LEDs can emit all these three colours at the same time. Basically each colour have a range of intensity from 0 to 255 which depends on the voltage provided to the respective pin. We combine these intensities (0 to 255) of these three colours to produce 16 million (256x256x256) different colors. In order to vary the voltage across these pins, we need to use PWM or timer to vary the duty cycle. In the configuration steps, we use TIM1 as clock source to provide PWM signal to drive three colour pins. The TIMER in our Nucleo64 board with model STM32F411RE maximum running at 100Mhz. We use prescalar register and auto reload register (ARR) to vary the duty cycle.  Duty cycle is the percentage of the total time that the signal is in HIGH state in one cycle. Since we want to configure the timer in such a way that 100% duty cycle is equivalent to 255 range of intensity, we take clock rate divide by 255. Next, we set ARR to 255 because we want the timer to count up to 255 in one cycle. Hence, the prescalar register will be set to the value of 100M/255^2 = 1538.
-- The stabilized temperature value from Kalman filter will be used to determine next colour to display on the RGB LEDs. If the Kalman temperature
-(a) Kalman temperature > 27 : RGB LEDs print BLUE
-(b) 27 <= Kalman temperature > 26 : RGB LEDs print GREEN
-(c) 26 <= Kalman temperature > 25 : RGB LEDs print YELLOW
-(c) Kalman temperature <= 25 : RGB LEDs print RED
-- When a different range of temperature is detected, the colour of RGB LEDs with be changing gradually from previous colour to the new colour which represents a new detected temperature range.  
+- The stabilized temperature value from Kalman filter will be used to determine next colour to display on the RGB LEDs. If the 
+1. Kalman temperature > 27 : RGB LEDs print BLUE,
+2. 27 <= Kalman temperature > 26 : RGB LEDs print GREEN
+3. 26 <= Kalman temperature > 25 : RGB LEDs print YELLOW
+4. Kalman temperature <= 25 : RGB LEDs print RED
+- When a different range of temperature is detected, the colour of RGB LEDs with be changing gradually from previous colour to the new colour which represents a new detected temperature range. 
