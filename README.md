@@ -18,30 +18,32 @@ Software:
 
 # Configuration steps
 This session can be divided into 4 main parts as configuration needs to be done separately at multithreading, ADC of temperature from LM35 temperature sensors, PWM control on RGB LEDs, and LCD display using STM32CubeMX IDE. 
+
 - Multithreading
-1. Step 1: 
-2. Step 2:
-3. Step 3:
-4. Step 4:
+1. Step 1: In the Categories tab on the left, go to Middleware and select FREERTOS. Change the interface from disable to CMSIS RTOS V2. 
+2. Step 2: Go to Tasks and Queues tab, we create three tasks/threads which are readtemp, printled and printlcd.
+3. Step 3: Change the priority of readtemp as osPriorityNormal while printled and printlcd as osPriorityBelowNormal, we will discuss in the session steps for firmware development. 
+4. Step 4: Renamed the entry function as ReadTemp, PrintLED and PrintLCD as it is just a function that is get called to start a task or thread. 
+5. Step 5: Go to System Core and select SYS. Change the timebase source to become other timer (TIM5), this is because STM32 HAL API use the systick timer to determine how much time has passed since restart. HAL required the timer at higher priority to keep the time accurate while scheduler in FREERTOS required the timebase at lower priority. In this case, we use timer TIM5 for HAL (higher priority) and leave Systick for FREERTOS. 
 
 - ADC of temperature from LM35 temperature sensors
-1. Step 1:
-2. Step 2:
-3. Step 3:
-4. Step 4:
+1. Step 1: In the Categories tab on the left, go to Analog and select ADC1. 
+2. Step 2: Enable the IN0 which corresponds to output pin PA0 to configure it as an ADC pin
+3. Step 3: Set the resolution value to 12 bits (15 ADC clock cycles) which specify the ADC values that we'll be getting ranges from 0 to 2^12.
 
 - PWM control on RGB LEDs
-1. Step 1: Go to select Timer configuration pane on the left, there are 4 built in timers. At the core, timer acts as a counter and each timer affect different set of pins. In this case, we select TIM1 as it controls pin PA8, PA9 and PA10. 
+1. Step 1: In the Categories tab on the left, go to Timer configuration. There are 4 built in timers. At the core, timer acts as a counter and each timer affect different set of pins. In this case, we select TIM1 as it controls pin PA8, PA9 and PA10. 
 2. Step 2: Set the clock source as internal clock source as we want the counter to increment once every single time of the system clock tick. 
-3. Step 3: Set channel 1, 2 and 3 to become PWM Generation CH1, CH2 and CH3 respectively. This step allows the generation of PWM signal to drive 3 output pins as these 3 pins will control the operation of RGB LEDs.   
+3. Step 3: Set channel 1, 2 and 3 to become PWM Generation CH1, CH2 and CH3 respectively. This step allows the generation of PWM signal to drive 3 output pins as these 3 pins will control the operation of RGB LEDs.
+![image](https://user-images.githubusercontent.com/82261395/122635291-93419800-d115-11eb-9a95-09509778ae2c.png)
 4. Step 4: Set the prescaler and counter value to become 1538 and 255 repspectively as we will discuss it lately in the steps for firmware development.
 5. Step 5: We can observe the output pins PA8, PA9 and PA10 are enabled and labeled as TIM1_CH1, TIM1_CH2 and TIM1_CH3 respectively. 
 
 - LCD display 
-1.
-2.
-3.
-4.
+1. Step 1: In the Pinout view, enable and declare pin PB0, PB1, PB2, PB4, PB5, PB6 and PB7 as GPIO output pins.
+2. Step 2: Label these GPIO output pins as RS, RW, EN, D4, D5, D6 and D7 respectively for better pin function recognition. 
+
+3. Step 3. Add on two additional files which is lcd.c and lcd.h, that is the libaries for the lcd where we can use the function directly to control the lcd module. 
 
 
 # Steps for firmware development
