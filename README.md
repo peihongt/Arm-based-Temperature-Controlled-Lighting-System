@@ -73,20 +73,23 @@ First Step: Defines Multiple Threads
 
 ![image](https://user-images.githubusercontent.com/82261395/122637649-7364a100-d122-11eb-96f3-955c93b553af.png)
 
-Second Step: Read Temp Thread
+Second Step: ReadTemp Thread
 - The entire process flow start with reading of ambient temperature from the surrounding every 100milliseconds. LM35 temperature sensor we used is an analog sensor that converts the surrounding temperature to a proportional analog voltage. The information or signal that we obtained from LM35 temperature is in the form of analog signal. In this case,  our microcontroller STM32F411RE is embedded with ADC converter that managed to derive the equivalent temperature value in digital format. In the ADC configuration step, he resolution value is set to 12 bits meaning this is the sample steps for our ADC, the converted ADC values or integer values that we get will be in the range from 0 to 2^12 = 4096. Then, Kalman Filter is applied in this project to further stabilize the temperature value from the LM35 temperature after ADC conversion.
 
 ![image](https://user-images.githubusercontent.com/82261395/122646456-d15cad00-d151-11eb-9e6d-3ffba70bd137.png)
 
-Third Step: PWM control on RGB LEDs
+Third Step: PrintLED Thread
 - As we know that RGB stands for Red, Green and Blue and these LEDs can emit all these three colours at the same time. Basically each colour have a range of intensity from 0 to 255 which depends on the voltage provided to the respective pin. We combine these intensities (0 to 255) of these three colours to produce 16 million (256x256x256) different colors. In order to vary the voltage across these pins, we need to use PWM or timer to vary the duty cycle. In the configuration steps, we use TIM1 as clock source to provide PWM signal to drive three colour pins. The TIMER in our Nucleo64 board with model STM32F411RE maximum running at 100Mhz. We use prescalar register and auto reload register (ARR) to vary the duty cycle.  Duty cycle is the percentage of the total time that the signal is in HIGH state in one cycle. Since we want to configure the timer in such a way that 100% duty cycle is equivalent to 255 range of intensity, we take clock rate divide by 255. Next, we set ARR to 255 because we want the timer to count up to 255 in one cycle. Hence, the prescalar register will be set to the value of 100M/255^2 = 1538.
-- The stabilized temperature value from Kalman filter will be used to determine next colour to display on the RGB LEDs. If the 
+- The stabilized temperature value from Kalman filter will be used to determine next colour to display on the RGB LEDs. A new colour will be updated on RGB LEDs every 4 seconds. If the 
 1. Kalman temperature > 27 : RGB LEDs print BLUE,
 2. 27 <= Kalman temperature > 26 : RGB LEDs print GREEN
 3. 26 <= Kalman temperature > 25 : RGB LEDs print YELLOW
 4. Kalman temperature <= 25 : RGB LEDs print RED
 - When a different range of temperature is detected, the colour of RGB LEDs with be changing gradually from previous colour to the new colour which represents a new detected temperature range. 
 
-![image](https://user-images.githubusercontent.com/82261395/122647624-99f0ff00-d157-11eb-9258-a0307d271782.png)
+![image](https://user-images.githubusercontent.com/82261395/122647812-9c078d80-d158-11eb-8877-c90b92cd83e9.png)
 
-Fourth Step: LCD Display
+Fourth Step: PrintLCD Thread
+- As explained in the first step, PrintLCD thread and PrintLED thread is assigned with same priority level which is OsPriorityBelowNormal. They will be executed by round-robin scheduling. Basically, this thread allows the printing of real time temperature value and the colour it will be changing to on the LCD screen. The new temperature value and the colour information will be updated every 4 seconds. 
+
+![image](https://user-images.githubusercontent.com/82261395/122648447-f1916980-d15b-11eb-8344-6c3c182d9bbd.png)
