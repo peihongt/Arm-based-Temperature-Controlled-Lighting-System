@@ -95,4 +95,5 @@ Fourth Step: PrintLCD Thread Setup
 2. 27 <= Kalman temperature > 26 : LCD print GREEN and current temperature
 3. 26 <= Kalman temperature > 25 : LCD print YELLOW and current temperature
 4. Kalman temperature <= 25 : LCD print RED and current temperature
+
 ![image](https://user-images.githubusercontent.com/82261395/122648447-f1916980-d15b-11eb-8344-6c3c182d9bbd.png)
