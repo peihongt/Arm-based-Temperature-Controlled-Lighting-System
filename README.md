@@ -9,6 +9,8 @@ Hardware:
 4. 110ohms Resistors
 5. 10k potentiometer
 6. LM35 temperature sensor
+7. Jumpers
+8. Breadboard
 
 ![image](https://user-images.githubusercontent.com/82261395/122631081-67b1b400-d0fb-11eb-865a-f7c9f88acc03.png)
 
@@ -97,3 +99,14 @@ Fourth Step: PrintLCD Thread Setup
 4. Kalman temperature <= 25 : LCD print RED and current temperature
 
 ![image](https://user-images.githubusercontent.com/82261395/122648447-f1916980-d15b-11eb-8344-6c3c182d9bbd.png)
+
+# Steps for hardware development
+1. Prepare all the hardware required as listed in the software/tools setup session.
+2. RGB LEDs setup
+
+3. LCD screen setup
+- Basically, the setup of LCD screen on STM32 Nucleo Board is shown as schematic below. We could see that other than LCD screen and STM32 Nucleo board, there is an additional potentiometer and 1k ohm resistor. The pin Vo of the LCD act as a control pin to adjust the contrast of LCD. The middle variable output pin of the potentiometer is connected to Vo pin of the LCD to provide an adjustable variable voltage from 0V to 5V for adjusting the LCD contrast. 
+
+![image](https://user-images.githubusercontent.com/82261395/122649886-afb7f180-d162-11eb-860a-a9e29563f523.png)
+
+![image](https://user-images.githubusercontent.com/82261395/122631081-67b1b400-d0fb-11eb-865a-f7c9f88acc03.png)
