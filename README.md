@@ -103,10 +103,13 @@ Fourth Step: PrintLCD Thread Setup
 # Steps for hardware development
 1. Prepare all the hardware required as listed in the software/tools setup session.
 2. RGB LEDs setup
+- The setup of RGB LEDs on STM32 Nucleo Board is shown as figure below. We applied 3 additional 220 ohm resistors on each RGB pins. 
+
+![image](https://user-images.githubusercontent.com/82261395/122651046-e264e880-d168-11eb-97ee-a466c5c57206.png)
 
 3. LCD screen setup
-- Basically, the setup of LCD screen on STM32 Nucleo Board is shown as schematic below. We could see that other than LCD screen and STM32 Nucleo board, there is an additional potentiometer. The pin Vo of the LCD act as a control pin to adjust the contrast of LCD. The middle variable output pin of the potentiometer is connected to Vo pin of the LCD to provide an adjustable variable voltage from 0V to 5V for adjusting the LCD contrast. 
+- The setup of LCD screen on STM32 Nucleo Board is shown as figure below. We could see that other than LCD screen and STM32 Nucleo board, there is an additional potentiometer. The pin Vo of the LCD act as a control pin to adjust the contrast of LCD. The middle variable output pin of the potentiometer is connected to Vo pin of the LCD to provide an adjustable variable voltage from 0V to 5V for adjusting the LCD contrast. 
 
 ![image](https://user-images.githubusercontent.com/82261395/122649886-afb7f180-d162-11eb-860a-a9e29563f523.png)
 
-![image](https://user-images.githubusercontent.com/82261395/122631081-67b1b400-d0fb-11eb-865a-f7c9f88acc03.png)
+4. LM35 Temperature sensor setup
