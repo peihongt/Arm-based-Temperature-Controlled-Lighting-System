@@ -35,9 +35,9 @@ This session can be divided into 4 main parts as configuration needs to be done 
 1. Step 1: In the Categories tab on the left, go to Timer configuration. There are 4 built in timers. At the core, timer acts as a counter and each timer affect different set of pins. In this case, we select TIM1 as it controls pin PA8, PA9 and PA10. 
 2. Step 2: Set the clock source as internal clock source as we want the counter to increment once every single time of the system clock tick. 
 3. Step 3: Set channel 1, 2 and 3 to become PWM Generation CH1, CH2 and CH3 respectively. This step allows the generation of PWM signal to drive 3 output pins as these 3 pins will control the operation of RGB LEDs.
-![image](https://user-images.githubusercontent.com/82261395/122635291-93419800-d115-11eb-9a95-09509778ae2c.png)
+![image](https://user-images.githubusercontent.com/82261395/122635452-9721ea00-d116-11eb-8feb-cce5df40d3f2.png)
 4. Step 4: Set the prescaler and counter value to become 1538 and 255 repspectively as we will discuss it lately in the steps for firmware development.
-![image](https://user-images.githubusercontent.com/82261395/122635322-c3893680-d115-11eb-913e-2ddf48f97571.png)
+
 5. Step 5: We can observe the output pins PA8, PA9 and PA10 are enabled and labeled as TIM1_CH1, TIM1_CH2 and TIM1_CH3 respectively. 
 ![image](https://user-images.githubusercontent.com/82261395/122635401-5033f480-d116-11eb-9203-b3d51025c520.png)
 
