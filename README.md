@@ -3,7 +3,7 @@ A smart temperature controlled lighting system is developed where the color tone
 
 # Hardware and Software used
 Hardware:
-1. STM32 Nucleo-64 development board (we are using STM32F411RE)
+1. STM32 Nucleo-64 development board (we are using STM32F446RE)
 2. 2x16 LCD display
 3. RGB LEDs 
 4. 220 ohm Resistors
@@ -16,7 +16,7 @@ Hardware:
 
 Software:
 1. STM32CubeMX
-- We use STM32CubeMX in this project as it is  a graphical tools that allows a very easy configuration of STM32 microcontroller and microprocessor. It also helps to generate the corresponding initialization C++ code for ARM Cortex-M core (we are using ARM Cortex M-4 core), through a step by step process. The first step is to select the model of STM32 microcontroller (we are using series STM32F411RE). The second step is to configure microprocessor in various peripheral supported, in our project we would be configuring peripheral RTOS, GPIO, TIMER and ADC. After configuration done, we need a toolchains to compile the code as STM32CubeMX just helped to configure the microprocessor easily and generate code initilization.
+- We use STM32CubeMX in this project as it is  a graphical tools that allows a very easy configuration of STM32 microcontroller and microprocessor. It also helps to generate the corresponding initialization C++ code for ARM Cortex-M core (we are using ARM Cortex M-4 core), through a step by step process. The first step is to select the model of STM32 microcontroller (we are using series STM32F446RE). The second step is to configure microprocessor in various peripheral supported, in our project we would be configuring peripheral RTOS, GPIO, TIMER and ADC. After configuration done, we need a toolchains to compile the code as STM32CubeMX just helped to configure the microprocessor easily and generate code initilization.
 
 ![image](https://user-images.githubusercontent.com/82261395/122660734-131f3f00-d1b6-11eb-8f00-92efe6d4fc2e.png)
 
@@ -72,7 +72,7 @@ This segment is divided into 4 main parts which are multithreading, configuratio
 
 # Steps for firmware development
 First Step: Defines Multiple Threads
-- Real-time operating system (RTOS) that run on our microcontroller STM32F411RE allow us to execute multiple tasks concurrently. The scheduler or OsKernel is told to handle three threads which are ReadTemp, PrintLED and PrintLCD. 
+- Real-time operating system (RTOS) that run on our microcontroller STM32F446RE allow us to execute multiple tasks concurrently. The scheduler or OsKernel is told to handle three threads which are ReadTemp, PrintLED and PrintLCD. 
 
 ![image](https://user-images.githubusercontent.com/82261395/122644963-5e036d00-d14a-11eb-94e0-0061c56bfa10.png)
 
@@ -81,12 +81,12 @@ First Step: Defines Multiple Threads
 ![image](https://user-images.githubusercontent.com/82261395/122637649-7364a100-d122-11eb-96f3-955c93b553af.png)
 
 Second Step: ReadTemp Thread Setup
-- The entire process flow start with reading of ambient temperature from the surrounding every 100milliseconds. LM35 temperature sensor we used is an analog sensor that converts the surrounding temperature to a proportional analog voltage. The information or signal that we obtained from LM35 temperature is in the form of analog signal. In this case,  our microcontroller STM32F411RE is embedded with ADC converter that managed to derive the equivalent temperature value in digital format. In the ADC configuration step, the resolution value is set to 12 bits meaning this is the sample steps for our ADC, the converted ADC values or integer values that we get will be in the range from 0 to 2^12-1 = 4095. Then, the value will be input to the Kalman Filter function to further stabilize the temperature value and return the optimized value.
+- The entire process flow start with reading of ambient temperature from the surrounding every 100milliseconds. LM35 temperature sensor we used is an analog sensor that converts the surrounding temperature to a proportional analog voltage. The information or signal that we obtained from LM35 temperature is in the form of analog signal. In this case,  our microcontroller STM32F466RE is embedded with ADC converter that managed to derive the equivalent temperature value in digital format. In the ADC configuration step, the resolution value is set to 12 bits meaning this is the sample steps for our ADC, the converted ADC values or integer values that we get will be in the range from 0 to 2^12-1 = 4095. Then, the value will be input to the Kalman Filter function to further stabilize the temperature value and return the optimized value.
 
 ![image](https://user-images.githubusercontent.com/82261395/122646456-d15cad00-d151-11eb-9e6d-3ffba70bd137.png)
 
 Third Step: PrintLED Thread Setup
-- As we know that RGB stands for Red, Green and Blue and these LEDs can emit all these three colours at the same time. Basically each colour have a range of intensity from 0 to 255 which depends on the voltage provided to the respective pin. We combine these intensities (0 to 255) of these three colours to produce 16 million (256x256x256) different colors. In order to vary the voltage across these pins, we need to use PWM or timer to vary the duty cycle. In the configuration steps, we use TIM1 as clock source to provide PWM signal to drive three colour pins. The TIMER in our Nucleo64 board with model STM32F411RE maximum running at 100Mhz. We use prescalar register and auto reload register (ARR) to vary the duty cycle.  Duty cycle is the percentage of the total time that the signal is in HIGH state in one cycle. Since we want to configure the timer in such a way that 100% duty cycle is equivalent to 255 range of intensity, we take clock rate divide by 255. Next, we set ARR to 255 because we want the timer to count up to 255 in one cycle. Hence, the prescalar register will be set to the value of 100M/255^2 = 1538.
+- As we know that RGB stands for Red, Green and Blue and these LEDs can emit all these three colours at the same time. Basically each colour have a range of intensity from 0 to 255 which depends on the voltage provided to the respective pin. We combine these intensities (0 to 255) of these three colours to produce 16 million (256x256x256) different colors. In order to vary the voltage across these pins, we need to use PWM or timer to vary the duty cycle. In the configuration steps, we use TIM1 as clock source to provide PWM signal to drive three colour pins. We set the TIMER in our Nucleo64 board with model STM32F466RE running at 100Mhz. We use prescalar register and auto reload register (ARR) to vary the duty cycle.  Duty cycle is the percentage of the total time that the signal is in HIGH state in one cycle. Since we want to configure the timer in such a way that 100% duty cycle is equivalent to 255 range of intensity, we take clock rate divide by 255. Next, we set ARR to 255 because we want the timer to count up to 255 in one cycle. Hence, the prescalar register will be set to the value of 100M/255^2 = 1538.
 - The stabilized temperature value from Kalman filter will be used to determine next colour to display on the RGB LEDs. A new colour will be updated on RGB LEDs every 4 seconds. If the 
 1. Kalman temperature > 27 : RGB LEDs print BLUE,
 2. 27 <= Kalman temperature > 26 : RGB LEDs print GREEN
