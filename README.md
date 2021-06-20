@@ -6,7 +6,7 @@ Hardware:
 1. STM32 Nucleo-64 development board (we are using STM32F411RE)
 2. 2x16 LCD display
 3. RGB LEDs 
-4. 110ohms Resistors
+4. 220 ohm Resistors
 5. 10k potentiometer
 6. LM35 temperature sensor
 7. Jumpers
