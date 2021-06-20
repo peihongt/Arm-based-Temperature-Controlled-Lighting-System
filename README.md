@@ -108,11 +108,13 @@ Fourth Step: PrintLCD Thread Setup
 # Steps for hardware development
 1. Prepare all the hardware required as listed in the software/tools setup session.
 2. RGB LEDs setup
-The setup of RGB LEDs on STM32 Nucleo Board is shown as figure below. We applied 3 additional 220 ohm resistors on each RGB pins. By referring to the RGB LEDs datasheets, the current needed to drive each RGB pin is 20mA. The output GPIO pins of our STM32 Nucleo Board is supplying up to 5V. In mathematical calculation, 
-
-![image](https://user-images.githubusercontent.com/82261395/122661314-968f5f00-d1bb-11eb-9ffc-a4f71d639ce4.png)
+- The setup of RGB LEDs on STM32 Nucleo Board is shown as figure below. We applied 3 additional 220 ohm resistors on each RGB pins. 
 
 ![image](https://user-images.githubusercontent.com/82261395/122651046-e264e880-d168-11eb-97ee-a466c5c57206.png)
+
+- By referring to the RGB LEDs datasheets, the current needed to drive each RGB pin is 20mA. The output GPIO pins of our STM32 Nucleo Board is supplying up to 5V. In mathematical calculation, apply formula V/I = R. For RED pin: (5V-2V)/20mA = 150 ohm, for GREEN pin: (5V-3V)/20mA = 100 ohm, for BLUE pin: (5V-2V)/20mA = 100 ohm. The ideal resistor value to maximize each RGB pins performance in terms of luminous intensity is 150 ohm, 100 ohm and 100 ohm respectively. In our project, the objective that we are using 220 ohm for each RGB instead of the ideal resistor value is due to a reason. The maximum current that can be afford by each RGB led pin is 20mA, if we use the resistor value for the absolute maximum current, we do not guarantee that the supply voltage is always 5V. Hence, we use higher resistor value to prevent the uncertainty occurred and that would damage the RGB leds and the STM32 Nucleo Board if come to the worst case. We can simply avoid it by using higher resistor value and sacrifice the luminous intensity.
+
+![image](https://user-images.githubusercontent.com/82261395/122661314-968f5f00-d1bb-11eb-9ffc-a4f71d639ce4.png)
 
 3. LCD screen setup
 The setup of LCD screen on STM32 Nucleo Board is shown as figure below. We could see that other than LCD screen and STM32 Nucleo board, there is an additional potentiometer. The pin Vo of the LCD act as a control pin to adjust the contrast of LCD. The middle variable output pin of the potentiometer is connected to Vo pin of the LCD to provide an adjustable variable voltage from 0V to 5V for adjusting the LCD contrast, the left pin connected to 5V Vdd while the right pin connected to the ground. 
@@ -120,3 +122,4 @@ The setup of LCD screen on STM32 Nucleo Board is shown as figure below. We could
 ![image](https://user-images.githubusercontent.com/82261395/122649886-afb7f180-d162-11eb-860a-a9e29563f523.png)
 
 4. LM35 Temperature sensor setup
+
