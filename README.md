@@ -12,7 +12,7 @@ Hardware:
 7. Jumpers
 8. Breadboard
 
-![image](https://user-images.githubusercontent.com/82261395/122631081-67b1b400-d0fb-11eb-865a-f7c9f88acc03.png)
+![image](https://user-images.githubusercontent.com/82261395/122662419-5cc35600-d1c5-11eb-8507-87b3a4c5d5b3.png)
 
 Software:
 1. STM32CubeMX
