@@ -17,9 +17,11 @@ Hardware:
 Software:
 1. STM32CubeMX
 - We use STM32CubeMX in this project as it is  a graphical tools that allows a very easy configuration of STM32 microcontroller and microprocessor. It also helps to generate the corresponding initialization C++ code for ARM Cortex-M core (we are using ARM Cortex M-4 core), through a step by step process. The first step is to select the model of STM32 microcontroller (we are using series STM32F411RE). The second step is to configure microprocessor in various peripheral supported, in our project we would be configuring peripheral GPIO, TIMER and ADC. After configuration done, we need a toolchains to compile the code as STM32CubeMX just helped to configure the microprocessor easily and generate code initilization.
-                    ![image](https://user-images.githubusercontent.com/82261395/122660734-131f3f00-d1b6-11eb-8f00-92efe6d4fc2e.png)
 
-3. Keil uVision
+![image](https://user-images.githubusercontent.com/82261395/122660734-131f3f00-d1b6-11eb-8f00-92efe6d4fc2e.png)
+
+2. Keil uVision
+- Keil uVision is an integrated development environment (IDE) as it integrates the tools needed to develop embedded applications. After we done the configuration in STM32CubeMX, it generates code initialization for the peripherals that we enabled to Keil uVision IDE. In Keil uVision, we are allowed to modify, build and compile the code using C++ compiler. The last step would be load the code to our STM32 Nucleo Board. 
 
 # Configuration steps
 This session is divided into 4 main parts as configuration needs to be done separately at multithreading, ADC on temperature from LM35 temperature sensors, PWM control on RGB LEDs, and LCD display using STM32CubeMX IDE. 
@@ -106,12 +108,14 @@ Fourth Step: PrintLCD Thread Setup
 # Steps for hardware development
 1. Prepare all the hardware required as listed in the software/tools setup session.
 2. RGB LEDs setup
-- The setup of RGB LEDs on STM32 Nucleo Board is shown as figure below. We applied 3 additional 220 ohm resistors on each RGB pins. 
+The setup of RGB LEDs on STM32 Nucleo Board is shown as figure below. We applied 3 additional 220 ohm resistors on each RGB pins. By referring to the RGB LEDs datasheets, the current needed to drive each RGB pin is 20mA. The output GPIO pins of our STM32 Nucleo Board is supplying up to 5V. In mathematical calculation, 
+
+![image](https://user-images.githubusercontent.com/82261395/122661314-968f5f00-d1bb-11eb-9ffc-a4f71d639ce4.png)
 
 ![image](https://user-images.githubusercontent.com/82261395/122651046-e264e880-d168-11eb-97ee-a466c5c57206.png)
 
 3. LCD screen setup
-- The setup of LCD screen on STM32 Nucleo Board is shown as figure below. We could see that other than LCD screen and STM32 Nucleo board, there is an additional potentiometer. The pin Vo of the LCD act as a control pin to adjust the contrast of LCD. The middle variable output pin of the potentiometer is connected to Vo pin of the LCD to provide an adjustable variable voltage from 0V to 5V for adjusting the LCD contrast. 
+The setup of LCD screen on STM32 Nucleo Board is shown as figure below. We could see that other than LCD screen and STM32 Nucleo board, there is an additional potentiometer. The pin Vo of the LCD act as a control pin to adjust the contrast of LCD. The middle variable output pin of the potentiometer is connected to Vo pin of the LCD to provide an adjustable variable voltage from 0V to 5V for adjusting the LCD contrast, the left pin connected to 5V Vdd while the right pin connected to the ground. 
 
 ![image](https://user-images.githubusercontent.com/82261395/122649886-afb7f180-d162-11eb-860a-a9e29563f523.png)
 
