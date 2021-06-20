@@ -124,7 +124,7 @@ The setup of LCD screen on STM32 Nucleo Board is shown as figure below. We could
 4. LM35 Temperature sensor setup
 The setup of LM35 temperature sensor on STM32 Nucleo Board is shown as below. We could see that the middle analog output pin is connected to the analog input pin on STM32 Nucleo Board. The analog output signal from LM35 is transmitted to analog input pin A0 on Nucleo Board to perform analog to digital conversion, the vdd pin connects to 3.3v on the board, while the right pin which is ground connects to the GND pin.
 
-![image](https://user-images.githubusercontent.com/82261395/122661947-f12bb980-d1c1-11eb-916e-9892372e33de.png)
+![image](https://user-images.githubusercontent.com/82261395/122668700-e259fc80-d1eb-11eb-89c1-6f87ee180a60.png)
 
 # Conclusion
 In this project, we have learned about ultilizing multiple thread functions of the CMSIS RTOS to enable the concurrent execution of tasks such as the detection of real time ambient temperature, gradual change of led colour from one to another depends on the real time temperature and displaying the current temperature value and colour as text on the lcd. This project has demonstrated how a rather cheap and accessible microcontroller like the stm32 series can be integrated in to the everyday life of people. 
