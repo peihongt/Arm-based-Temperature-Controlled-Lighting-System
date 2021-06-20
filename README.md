@@ -1,7 +1,7 @@
 # Introduction
-A smart temperature controlled lighting system is developed where the color tone of the RGB led will change automatically and gradually as the ambient temperature changes to give people more comfortable feeling. We will be using STM32 Nucleo-64 development board to display different colour of lightning at the output RGB LEDs depending on the range of ambient temperature captured from the input temperature sensor. Then, the detected temperature value and the colour printing on the led will be printed on the output LCD screen. 
+A smart temperature controlled lighting system is developed where the color tone of the RGB led will change automatically and gradually as the ambient temperature changes as to give people more comfortable feeling. We will be using STM32 Nucleo-64 development board to produce PWM signals to display different colours of lightning using RGB LEDs depending on the ambient temperature captured by temperature sensor. The detected temperature value and the colour to be displayed by the led will be printed on the LCD screen. 
 
-# Hardware and Software needed
+# Hardware and Software used
 Hardware:
 1. STM32 Nucleo-64 development board (we are using STM32F411RE)
 2. 2x16 LCD display
@@ -16,19 +16,19 @@ Hardware:
 
 Software:
 1. STM32CubeMX
-- We use STM32CubeMX in this project as it is  a graphical tools that allows a very easy configuration of STM32 microcontroller and microprocessor. It also helps to generate the corresponding initialization C++ code for ARM Cortex-M core (we are using ARM Cortex M-4 core), through a step by step process. The first step is to select the model of STM32 microcontroller (we are using series STM32F411RE). The second step is to configure microprocessor in various peripheral supported, in our project we would be configuring peripheral GPIO, TIMER and ADC. After configuration done, we need a toolchains to compile the code as STM32CubeMX just helped to configure the microprocessor easily and generate code initilization.
+- We use STM32CubeMX in this project as it is  a graphical tools that allows a very easy configuration of STM32 microcontroller and microprocessor. It also helps to generate the corresponding initialization C++ code for ARM Cortex-M core (we are using ARM Cortex M-4 core), through a step by step process. The first step is to select the model of STM32 microcontroller (we are using series STM32F411RE). The second step is to configure microprocessor in various peripheral supported, in our project we would be configuring peripheral RTOS, GPIO, TIMER and ADC. After configuration done, we need a toolchains to compile the code as STM32CubeMX just helped to configure the microprocessor easily and generate code initilization.
 
 ![image](https://user-images.githubusercontent.com/82261395/122660734-131f3f00-d1b6-11eb-8f00-92efe6d4fc2e.png)
 
 2. Keil uVision
-- Keil uVision is an integrated development environment (IDE) as it integrates the tools needed to develop embedded applications. After we done the configuration in STM32CubeMX, it generates code initialization for the peripherals that we enabled to Keil uVision IDE. In Keil uVision, we are allowed to modify, build and compile the code using C++ compiler. The last step would be load the code to our STM32 Nucleo Board. 
+- Keil uVision is an integrated development environment (IDE) as it integrates the tools needed to develop embedded applications. After we done the configuration in STM32CubeMX, it generates code initialization for the peripherals that we enabled to Keil uVision IDE. In Keil uVision, is where we actually develop the main functions of the program, build and compile the code using C++ compiler. The last step would be load the code to our STM32 Nucleo Board. 
 
-# Configuration steps
-This session is divided into 4 main parts as configuration needs to be done separately at multithreading, ADC on temperature from LM35 temperature sensors, PWM control on RGB LEDs, and LCD display using STM32CubeMX IDE. 
+# Configuration steps using STM32CubeMX
+This segment is divided into 4 main parts which are multithreading, configurations on ADC for temperature from LM35 temperature sensors, PWM control for RGB LEDs, and LCD display using STM32CubeMX IDE. The configuration for the necessary I/O pins will be explained as well.
 
 1. Multithreading
 - Step 1: In the Categories tab on the left, go to Middleware and select FREERTOS. Change the interface from disable to CMSIS RTOS V2. 
-- Step 2: Go to Tasks and Queues tab, we create three tasks/threads which are readtemp, printled and printlcd.
+- Step 2: Go to Tasks and Queues tab, create three tasks/threads which are readtemp, printled and printlcd.
 - Step 3: Change the priority of readtemp as osPriorityNormal while printled and printlcd as osPriorityBelowNormal, we will discuss in the session steps for firmware development. 
 - Step 4: Renamed the entry function as ReadTemp, PrintLED and PrintLCD as it is just a function that is get called to start a task or thread. 
 
@@ -41,7 +41,7 @@ This session is divided into 4 main parts as configuration needs to be done sepa
 2. ADC conversion on input analog temperature value
 - Step 1: In the Categories tab on the left, go to Analog and select ADC1. 
 - Step 2: Enable the IN0 which corresponds to output pin PA0 to configure it as an ADC pin
-- Step 3: Set the resolution value to 12 bits (15 ADC clock cycles) which specify the ADC values that we'll be getting ranges from 0 to 2^12.
+- Step 3: Set the resolution value to 12 bits (15 ADC clock cycles) which specify the ADC values that we'll be getting ranges from 0 to 2^12 which is 4095 and change the sampling time to 15 clock cycles.
 
 ![image](https://user-images.githubusercontent.com/82261395/122635837-a30eab80-d118-11eb-8632-472ff0fd57e0.png)
 
@@ -66,7 +66,7 @@ This session is divided into 4 main parts as configuration needs to be done sepa
 
 ![image](https://user-images.githubusercontent.com/82261395/122635805-78245780-d118-11eb-8370-fdb7489f8159.png)
 
-- Step 3. Add on two additional files which is lcd.c and lcd.h, that is the libaries for the lcd where we can use the function directly to control the lcd module. 
+- Step 3. At Keil, nclude the additional libraries for the lcd, which are lcd.c and lcd.h, that is the libaries for the lcd where we can use the function directly to control the lcd module. 
 
 ![image](https://user-images.githubusercontent.com/82261395/122635688-f9c7b580-d117-11eb-8d4b-991be24d9f30.png)
 
@@ -81,7 +81,7 @@ First Step: Defines Multiple Threads
 ![image](https://user-images.githubusercontent.com/82261395/122637649-7364a100-d122-11eb-96f3-955c93b553af.png)
 
 Second Step: ReadTemp Thread Setup
-- The entire process flow start with reading of ambient temperature from the surrounding every 100milliseconds. LM35 temperature sensor we used is an analog sensor that converts the surrounding temperature to a proportional analog voltage. The information or signal that we obtained from LM35 temperature is in the form of analog signal. In this case,  our microcontroller STM32F411RE is embedded with ADC converter that managed to derive the equivalent temperature value in digital format. In the ADC configuration step, he resolution value is set to 12 bits meaning this is the sample steps for our ADC, the converted ADC values or integer values that we get will be in the range from 0 to 2^12 = 4096. Then, Kalman Filter is applied in this project to further stabilize the temperature value from the LM35 temperature after ADC conversion.
+- The entire process flow start with reading of ambient temperature from the surrounding every 100milliseconds. LM35 temperature sensor we used is an analog sensor that converts the surrounding temperature to a proportional analog voltage. The information or signal that we obtained from LM35 temperature is in the form of analog signal. In this case,  our microcontroller STM32F411RE is embedded with ADC converter that managed to derive the equivalent temperature value in digital format. In the ADC configuration step, the resolution value is set to 12 bits meaning this is the sample steps for our ADC, the converted ADC values or integer values that we get will be in the range from 0 to 2^12-1 = 4095. Then, the value will be input to the Kalman Filter function to further stabilize the temperature value and return the optimized value.
 
 ![image](https://user-images.githubusercontent.com/82261395/122646456-d15cad00-d151-11eb-9e6d-3ffba70bd137.png)
 
@@ -98,10 +98,10 @@ Third Step: PrintLED Thread Setup
 
 Fourth Step: PrintLCD Thread Setup
 - As explained in the first step, PrintLCD thread and PrintLED thread is assigned with same priority level which is OsPriorityBelowNormal. They will be executed by round-robin scheduling. Basically, this thread allows the printing of real time temperature value and the colour it will be changing to on the LCD screen. The new temperature value and the colour information will be updated every 4 seconds. If the 
-1. Kalman temperature > 27 : LCD print BLUE and current temperature
-2. 27 <= Kalman temperature > 26 : LCD print GREEN and current temperature
-3. 26 <= Kalman temperature > 25 : LCD print YELLOW and current temperature
-4. Kalman temperature <= 25 : LCD print RED and current temperature
+1. Kalman temperature > 27 : LCD print the text, BLUE and current temperature
+2. 27 <= Kalman temperature > 26 : LCD print the text, GREEN and current temperature
+3. 26 <= Kalman temperature > 25 : LCD print the text, YELLOW and current temperature
+4. Kalman temperature <= 25 : LCD print the text, RED and current temperature
 
 ![image](https://user-images.githubusercontent.com/82261395/122648447-f1916980-d15b-11eb-8344-6c3c182d9bbd.png)
 
@@ -122,9 +122,9 @@ The setup of LCD screen on STM32 Nucleo Board is shown as figure below. We could
 ![image](https://user-images.githubusercontent.com/82261395/122649886-afb7f180-d162-11eb-860a-a9e29563f523.png)
 
 4. LM35 Temperature sensor setup
-The setup of LM35 temperature sensor on STM32 Nucleo Board is shown as below. We could see that the middle analog output pin is connected to the analog input pin on STM32 Nucleo Board. The analog output signal from LM35 is transmitted to analog input pin A0 on Nucleo Board to perform analog to digital conversion, the left pin connected to 5V Vdd while the right pin connected to the ground.
+The setup of LM35 temperature sensor on STM32 Nucleo Board is shown as below. We could see that the middle analog output pin is connected to the analog input pin on STM32 Nucleo Board. The analog output signal from LM35 is transmitted to analog input pin A0 on Nucleo Board to perform analog to digital conversion, the vdd pin connects to 3.3v on the board, while the right pin which is ground connects to the GND pin.
 
 ![image](https://user-images.githubusercontent.com/82261395/122661947-f12bb980-d1c1-11eb-916e-9892372e33de.png)
 
 # Conclusion
-In this project, we have learned about ultilizing multiple thread functions of the CMSIS RTOS to enable the concurrent execution of tasks such as the detection of real time ambient temperature every 100 milliseconds, gradual change of led colour from one to another depends on the real time temperature read every 4 second and display current temperature value and colour onto the led every 4 seconds. We believe the rather cheap and accessible STM32 series microcontroller can be integrated in to the everyday life of people.
+In this project, we have learned about ultilizing multiple thread functions of the CMSIS RTOS to enable the concurrent execution of tasks such as the detection of real time ambient temperature, gradual change of led colour from one to another depends on the real time temperature and displaying the current temperature value and colour as text on the lcd. This project has demonstrated how a rather cheap and accessible microcontroller like the stm32 series can be integrated in to the everyday life of people. 
