@@ -15,8 +15,11 @@ Hardware:
 ![image](https://user-images.githubusercontent.com/82261395/122631081-67b1b400-d0fb-11eb-865a-f7c9f88acc03.png)
 
 Software:
-1. STM32CubeMX IDE
-2. Keil uVision
+1. STM32CubeMX
+- We use STM32CubeMX in this project as it is  a graphical tools that allows a very easy configuration of STM32 microcontroller and microprocessor. It also helps to generate the corresponding initialization C++ code for ARM Cortex-M core (we are using ARM Cortex M-4 core), through a step by step process. The first step is to select the model of STM32 microcontroller (we are using series STM32F411RE). The second step is to configure microprocessor in various peripheral supported, in our project we would be configuring peripheral GPIO, TIMER and ADC. After configuration done, we need a toolchains to compile the code as STM32CubeMX just helped to configure the microprocessor easily and generate code initilization.
+                    ![image](https://user-images.githubusercontent.com/82261395/122660734-131f3f00-d1b6-11eb-8f00-92efe6d4fc2e.png)
+
+3. Keil uVision
 
 # Configuration steps
 This session is divided into 4 main parts as configuration needs to be done separately at multithreading, ADC on temperature from LM35 temperature sensors, PWM control on RGB LEDs, and LCD display using STM32CubeMX IDE. 
